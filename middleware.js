@@ -5,7 +5,7 @@ export const config = {
 };
 
 export default async function middleware(request) {
-  const assetUrl = new URL('/magangjogja.html', request.url);
+  const assetUrl = new URL('/index.html', request.url);
   const response = await fetch(assetUrl);
 
   const contentType = response.headers.get('content-type') || '';
@@ -19,6 +19,7 @@ export default async function middleware(request) {
 
   const headers = new Headers(response.headers);
   headers.delete('content-length');
+  headers.delete('content-encoding');
   headers.set('cache-control', 'no-store');
 
   return new Response(html, {

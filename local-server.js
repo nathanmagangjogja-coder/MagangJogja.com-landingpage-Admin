@@ -215,7 +215,7 @@ function parseBody(req) {
 
 function resolveFile(urlPath) {
   const pathname = decodeURIComponent(urlPath.split("?")[0]);
-  if (pathname === "/") return path.join(__dirname, "magangjogja.html");
+  if (pathname === "/") return path.join(__dirname, "index.html");
   if (pathname === "/admin") return path.join(__dirname, "admin.html");
 
   const relative = pathname.replace(/^\/+/, "");
@@ -253,7 +253,7 @@ function serveFile(res, file) {
       return res.end("Not Found");
     }
 
-    if (path.basename(file) === "magangjogja.html") {
+    if (path.basename(file) === "index.html") {
       fs.readFile(file, "utf8", (readErr, html) => {
         if (readErr) {
           res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
