@@ -1,0 +1,39 @@
+@font-face {
+  font-family: 'DK Display Patrol';
+  src: url('DKDisplayPatrol.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comic Helvetic';
+  src: url('ComicHelvetic_Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comic Helvetic';
+  src: url('ComicHelvetic_Medium.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comic Helvetic';
+  src: url('ComicHelvetic_Heavy.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comic Helvetic';
+  src: url('ComicHelvetic_Heavy.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

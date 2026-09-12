@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — magangjogja.com</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --mint:#3FC68E; --mint-dark:#3DBE71; --sun:#FBC654; --coral:#DE7676;
+    --tangerine:#F8A041; --ink:#1D2733; --cream:#FFFDF7; --line:#E7E2D6;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Plus Jakarta Sans', sans-serif; background:var(--cream); color:var(--ink); min-height:100vh;}
+  h1,h2,.brandfont{font-family:'Baloo 2', sans-serif;}
+  a{color:inherit;}
+
+  /* ---------- gate ---------- */
+  #gate{
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(160deg, var(--mint), var(--mint-dark));
+    padding:1.5rem;
+  }
+  .gate-card{
+    background:#fff; border-radius:20px; padding:2.4rem 2rem; max-width:360px; width:100%;
+    text-align:center; box-shadow:0 20px 40px rgba(0,0,0,.18);
+    animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes popIn{0%{opacity:0; transform:scale(.85) translateY(16px);} 100%{opacity:1; transform:scale(1) translateY(0);}}
+  .gate-card h1{font-size:1.4rem; margin-bottom:.4rem;}
+  .gate-card p{font-size:.85rem; color:#667; margin-bottom:1.4rem;}
+  .gate-card input{
+    width:100%; padding:.85rem 1rem; border-radius:12px; border:2px solid var(--line);
+    font-size:1rem; margin-bottom:1rem; font-family:inherit;
+  }
+  .gate-card input:focus{outline:none; border-color:var(--mint-dark);}
+  .gate-card button{
+    width:100%; padding:.9rem; border:none; border-radius:12px; background:var(--mint-dark);
+    color:#fff; font-weight:700; font-size:1rem; cursor:pointer; font-family:'Baloo 2',sans-serif;
+    transition:transform .15s ease;
+  }
+  .gate-card button:hover{transform:translateY(-2px);}
+  .gate-card button:disabled{opacity:.6; cursor:default; transform:none;}
+  .gate-error{color:#C0392B; font-size:.82rem; margin-top:.7rem; min-height:1.2em;}
+  .gate-hint{margin-top:1.2rem; font-size:.72rem; color:#99a;}
+
+  /* ---------- admin shell ---------- */
+  #admin{display:none;}
+  #admin.show{display:block;}
+  .topbar{
+    position:sticky; top:0; z-index:50; background:var(--mint-dark); color:#fff;
+    display:flex; align-items:center; justify-content:space-between; padding:1rem 5vw;
+    box-shadow:0 4px 14px rgba(0,0,0,.12);
+  }
+  .topbar .brandfont{font-weight:800; font-size:1.15rem;}
+  .topbar-actions{display:flex; gap:.6rem; flex-wrap:wrap;}
+  .btn{
+    border:none; border-radius:10px; padding:.55rem 1rem; font-weight:700; font-size:.82rem;
+    cursor:pointer; font-family:'Baloo 2',sans-serif; transition:transform .15s ease, opacity .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn:disabled{opacity:.6; cursor:default; transform:none;}
+  .btn-light{background:#fff; color:var(--mint-dark);}
+  .btn-outline{background:transparent; color:#fff; border:2px solid rgba(255,255,255,.6);}
+  .btn-danger{background:#E2777D; color:#fff;}
+  .btn-primary{background:var(--ink); color:#fff;}
+
+  main{max-width:900px; margin:0 auto; padding:2rem 5vw 5rem;}
+  .panel{
+    background:#fff; border-radius:18px; padding:1.6rem 1.6rem 1.8rem; margin-bottom:1.8rem;
+    border:1px solid var(--line);
+  }
+  .panel h2{font-size:1.1rem; margin-bottom:.3rem;}
+  .panel .hint{font-size:.8rem; color:#889; margin-bottom:1.2rem;}
+  .field{margin-bottom:1rem;}
+  .field label{display:block; font-weight:700; font-size:.82rem; margin-bottom:.35rem; color:#445;}
+  .field input, .field textarea{
+    width:100%; padding:.7rem .85rem; border-radius:10px; border:2px solid var(--line);
+    font-family:inherit; font-size:.92rem; resize:vertical;
+  }
+  .field input:focus, .field textarea:focus{outline:none; border-color:var(--mint-dark);}
+  .logo-preview{display:flex; align-items:center; gap:1rem; margin-bottom:1rem;}
+  .logo-preview img{height:44px; width:auto; background:#FAFAF5; border:1px solid var(--line); border-radius:8px; padding:.3rem .6rem;}
+
+  .row-item{
+    display:flex; gap:.6rem; align-items:flex-start; margin-bottom:.7rem;
+    background:#FAFAF5; border:1px solid var(--line); border-radius:12px; padding:.7rem;
+  }
+  .row-item .row-fields{flex:1; display:flex; gap:.6rem; flex-wrap:wrap;}
+  .row-item input{flex:1; min-width:140px;}
+  .row-remove{
+    background:#E2777D; color:#fff; border:none; border-radius:8px; width:32px; height:32px;
+    cursor:pointer; font-weight:800; flex-shrink:0;
+  }
+  .add-row{
+    display:inline-flex; align-items:center; gap:.4rem; background:var(--sun); color:#3a2c05;
+    border:none; border-radius:10px; padding:.6rem 1rem; font-weight:700; font-size:.85rem;
+    cursor:pointer; margin-top:.3rem; font-family:'Baloo 2',sans-serif;
+  }
+  .count-badge{
+    display:inline-block; background:var(--mint); color:#fff; font-size:.72rem; font-weight:700;
+    border-radius:999px; padding:.15rem .6rem; margin-left:.4rem; font-family:'Baloo 2',sans-serif;
+  }
+
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:#fff; padding:.8rem 1.4rem; border-radius:12px;
+    font-weight:600; font-size:.88rem; opacity:0; transition:opacity .25s ease, transform .25s ease;
+    pointer-events:none; z-index:200;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+
+  /* ---------- change history ---------- */
+  .history-list{display:flex; flex-direction:column; gap:.75rem;}
+  .history-empty{padding:1rem; border:1px dashed var(--line); border-radius:12px; color:#889; font-size:.85rem; text-align:center;}
+  .history-item{border:1px solid var(--line); border-radius:12px; background:#FAFAF5; overflow:hidden;}
+  .history-item summary{list-style:none; cursor:pointer; padding:.9rem 1rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem;}
+  .history-item summary::-webkit-details-marker{display:none;}
+  .history-item summary:hover{background:#f7f7f0;}
+  .history-main{min-width:0;}
+  .history-title{font-weight:800; font-size:.88rem; margin-bottom:.2rem;}
+  .history-time{font-size:.72rem; color:#889;}
+  .history-chevron{font-weight:800; color:#889; transition:transform .15s ease;}
+  .history-item[open] .history-chevron{transform:rotate(180deg);}
+  .history-detail{border-top:1px solid var(--line); padding:1rem;}
+  .history-change{background:#fff; border:1px solid var(--line); border-radius:10px; padding:.75rem; margin-bottom:.55rem;}
+  .history-change:last-child{margin-bottom:0;}
+  .history-field{font-size:.72rem; font-weight:800; color:#667; margin-bottom:.45rem; word-break:break-word;}
+  .history-value{font-size:.82rem; line-height:1.45; word-break:break-word;}
+  .history-before,.history-after{padding:.5rem .65rem; border-radius:8px;}
+  .history-before{background:#fff1f1;}
+  .history-after{background:#effaf4; margin-top:.4rem;}
+  .history-label{display:block; font-size:.68rem; font-weight:800; color:#778; margin-bottom:.2rem; text-transform:uppercase;}
+  .history-snapshot{margin-top:.8rem;}
+  .history-snapshot summary{padding:0; font-size:.76rem; color:#667; font-weight:700;}
+  .history-snapshot pre{white-space:pre-wrap; word-break:break-word; background:#fff; border:1px solid var(--line); border-radius:10px; padding:.7rem; margin-top:.5rem; font-size:.7rem; max-height:280px; overflow:auto;}
+  .history-actions{display:flex; justify-content:center; margin-top:1rem;}
+  .history-load{background:var(--sun); color:#3a2c05; border:none; border-radius:10px; padding:.65rem 1rem; font-weight:700; font-family:'Baloo 2',sans-serif; cursor:pointer;}
+  .history-load:disabled{opacity:.6; cursor:default;}
+
+  input[type=file]{display:none;}
+</style>
+</head>
+<body>
+
+  <!-- ================= LOGIN GATE ================= -->
+  <div id="gate">
+    <div class="gate-card">
+      <h1 class="brandfont">Admin magangjogja.com</h1>
+      <p>Masukkan kata sandi untuk mengatur logo, Formasi Magang, dan Fasilitas.</p>
+      <input type="password" id="pwInput" placeholder="Kata sandi admin" autocomplete="off">
+      <button id="pwSubmit">Masuk</button>
+      <div class="gate-error" id="pwError"></div>
+      <div class="gate-hint">Password default: <code>magang2026</code>. Untuk production, ganti lewat Environment Variable <code>ADMIN_PASSWORD</code> di dashboard Vercel (tidak perlu edit kode).</div>
+    </div>
+  </div>
+
+  <!-- ================= ADMIN PANEL ================= -->
+  <div id="admin">
+    <div class="topbar">
+      <span class="brandfont">⚙️ Admin Panel — magangjogja.com</span>
+      <div class="topbar-actions">
+        <a class="btn btn-outline" href="/" target="_blank">Lihat Website</a>
+        <button class="btn btn-light" id="exportBtn">Export JSON</button>
+        <button class="btn btn-light" id="importBtn">Import JSON</button>
+        <input type="file" id="importFile" accept="application/json">
+        <button class="btn btn-danger" id="resetBtn">Reset Default</button>
+        <button class="btn btn-primary" id="saveBtn">💾 Simpan Perubahan</button>
+      </div>
+    </div>
+
+    <main>
+      <!-- LOGO -->
+      <section class="panel">
+        <h2>Logo</h2>
+        <p class="hint">Path/URL gambar logo. Kalau ganti file, upload dulu ke folder <code>assets/</code>, lalu isi nama filenya di sini (contoh: <code>assets/logo-baru.png</code>).</p>
+        <div class="logo-preview">
+          <img id="logoPreview" src="" alt="Preview logo">
+          <div class="field" style="flex:1; margin:0;">
+            <input id="f-logo" placeholder="assets/logo.png">
+          </div>
+        </div>
+      </section>
+
+      <!-- FORMASI MAGANG -->
+      <section class="panel">
+        <h2>Formasi Magang <span class="count-badge" id="positionsCount">0</span></h2>
+        <p class="hint">Icon bisa berupa emoji (contoh: 🎨) atau path gambar (contoh: assets/icon-baru.png — upload dulu file gambarnya ke folder assets/). Tambah/hapus baris untuk menambah atau mengurangi jumlah formasi.</p>
+        <div id="positionsRows"></div>
+        <button class="add-row" data-add="positions">+ Tambah Formasi</button>
+      </section>
+
+      <!-- FASILITAS -->
+      <section class="panel">
+        <h2>Fasilitas yang Didapat <span class="count-badge" id="facilitiesCount">0</span></h2>
+        <p class="hint">Tambah/hapus baris untuk menambah atau mengurangi jumlah fasilitas.</p>
+        <div id="facilitiesRows"></div>
+        <button class="add-row" data-add="facilities">+ Tambah Fasilitas</button>
+      </section>
+
+      <!-- RIWAYAT PERUBAHAN -->
+      <section class="panel" id="historyPanel">
+        <h2>Riwayat Perubahan</h2>
+        <p class="hint">Audit trail perubahan yang berhasil disimpan melalui panel admin. Riwayat tidak dapat dihapus dari UI.</p>
+        <div id="historyList" class="history-list">
+          <div class="history-empty">Memuat riwayat...</div>
+        </div>
+        <div class="history-actions">
+          <button class="history-load" id="historyLoadMore" hidden>Muat Riwayat Berikutnya</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script src="content.js"></script>
+<script>
+  const gate = document.getElementById('gate');
+  const adminEl = document.getElementById('admin');
+  const pwInput = document.getElementById('pwInput');
+  const pwError = document.getElementById('pwError');
+  const pwSubmit = document.getElementById('pwSubmit');
+
+  // Kept only in memory for this tab, resent with every save/reset
+  // so the server can re-verify it. Never stored in localStorage.
+  let adminPassword = null;
+
+  async function tryLogin(){
+    const value = pwInput.value;
+    pwError.textContent = '';
+    pwSubmit.disabled = true;
+    pwSubmit.textContent = 'Memeriksa...';
+    const result = await checkAdminPassword(value);
+    pwSubmit.disabled = false;
+    pwSubmit.textContent = 'Masuk';
+    if (result.ok){
+      adminPassword = value;
+      gate.style.display = 'none';
+      adminEl.classList.add('show');
+      initForm();
+    } else {
+      pwError.textContent = result.error || 'Gagal masuk. Coba lagi.';
+    }
+  }
+  pwSubmit.addEventListener('click', tryLogin);
+  pwInput.addEventListener('keydown', e => { if(e.key === 'Enter') tryLogin(); });
+
+  let state = null;
+
+  async function initForm(){
+    state = await loadContent();
+    fillLogo();
+    renderRows('positions');
+    renderRows('facilities');
+    await loadHistory(true);
+  }
+
+  function fillLogo(){
+    document.getElementById('f-logo').value = state.logo;
+    document.getElementById('logoPreview').src = state.logo;
+  }
+
+  document.getElementById('f-logo').addEventListener('input', (e) => {
+    document.getElementById('logoPreview').src = e.target.value;
+  });
+
+  function updateCounts(){
+    document.getElementById('positionsCount').textContent = state.positions.length;
+    document.getElementById('facilitiesCount').textContent = state.facilities.length;
+  }
+
+  function renderRows(key){
+    const container = document.getElementById(key + 'Rows');
+    container.innerHTML = '';
+    state[key].forEach((item, idx) => {
+      const row = document.createElement('div');
+      row.className = 'row-item';
+      if (key === 'positions'){
+        row.innerHTML = `
+          <div class="row-fields">
+            <input type="text" value="${escapeAttr(item.icon)}" placeholder="Icon (emoji atau assets/nama.png)" data-field="icon" data-idx="${idx}">
+            <input type="text" value="${escapeAttr(item.label)}" placeholder="Nama posisi" data-field="label" data-idx="${idx}">
+          </div>
+          <button class="row-remove" data-remove="${key}" data-idx="${idx}">×</button>`;
+      } else {
+        row.innerHTML = `
+          <div class="row-fields">
+            <textarea rows="1" data-field="text" data-idx="${idx}">${escapeHtml(item)}</textarea>
+          </div>
+          <button class="row-remove" data-remove="${key}" data-idx="${idx}">×</button>`;
+      }
+      container.appendChild(row);
+    });
+    updateCounts();
+  }
+
+  function escapeHtml(str){ return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
+  function escapeAttr(str){ return escapeHtml(str); }
+
+  document.querySelectorAll('[data-add]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.getAttribute('data-add');
+      if (key === 'positions') state.positions.push({ icon: '⭐', label: 'Posisi Baru' });
+      else state[key].push('Isi teks di sini');
+      renderRows(key);
+    });
+  });
+
+  main = document.querySelector('main');
+  main.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-remove]');
+    if (!btn) return;
+    const key = btn.getAttribute('data-remove');
+    const idx = parseInt(btn.getAttribute('data-idx'), 10);
+    state[key].splice(idx, 1);
+    renderRows(key);
+  });
+
+  main.addEventListener('input', (e) => {
+    const t = e.target;
+    if (!t.hasAttribute('data-field')) return;
+    const idx = parseInt(t.getAttribute('data-idx'), 10);
+    const row = t.closest('.row-item');
+    const container = row.parentElement;
+    const key = container.id.replace('Rows', '');
+    const field = t.getAttribute('data-field');
+    if (key === 'positions'){
+      state.positions[idx][field] = t.value;
+    } else {
+      state[key][idx] = t.value;
+    }
+  });
+
+  function showToast(msg){
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2600);
+  }
+
+  function setBusy(btn, busyLabel){
+    const original = btn.textContent;
+    btn.disabled = true;
+    btn.dataset.originalLabel = original;
+    btn.textContent = busyLabel;
+    return () => { btn.disabled = false; btn.textContent = btn.dataset.originalLabel; };
+  }
+
+  document.getElementById('saveBtn').addEventListener('click', async (e) => {
+    state.logo = document.getElementById('f-logo').value.trim() || state.logo;
+    const restore = setBusy(e.currentTarget, 'Menyimpan...');
+    const result = await saveContent(state, adminPassword);
+    restore();
+    if (result.ok){
+      await loadHistory(true);
+      showToast(result.changed === false ? 'ℹ️ Tidak ada perubahan yang disimpan.' : '✅ Perubahan tersimpan — langsung tampil untuk semua pengunjung.');
+    } else {
+      showToast('❌ ' + result.error);
+    }
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', async (e) => {
+    if (!confirm('Kembalikan logo, Formasi Magang, dan Fasilitas ke default bawaan untuk SEMUA pengunjung? Perubahan yang belum di-export akan hilang.')) return;
+    const restore = setBusy(e.currentTarget, 'Mereset...');
+    const result = await resetContent(adminPassword);
+    restore();
+    if (result.ok){
+      await initForm();
+      showToast(result.changed === false ? 'ℹ️ Konten sudah menggunakan konfigurasi default.' : 'Konten dikembalikan ke default untuk semua pengunjung.');
+    } else {
+      showToast('❌ ' + result.error);
+    }
+  });
+
+  let historyOffset = 0;
+  let historyHasMore = false;
+
+  function formatHistoryTime(value){
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return String(value || '');
+    return new Intl.DateTimeFormat('id-ID', {
+      timeZone: 'Asia/Jakarta', day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+    }).format(d).replace('.', ':') + ' WIB';
+  }
+
+  function historyValue(value){
+    if (value === null || value === undefined) return '—';
+    if (typeof value === 'string') return value || '—';
+    return JSON.stringify(value, null, 2);
+  }
+
+  function renderHistory(items, append){
+    const list = document.getElementById('historyList');
+    if (!append) list.innerHTML = '';
+    if (!items.length && !append){
+      list.innerHTML = '<div class="history-empty">Belum ada riwayat perubahan.</div>';
+      return;
+    }
+    items.forEach(item => {
+      const details = document.createElement('details');
+      details.className = 'history-item';
+      const summary = document.createElement('summary');
+      summary.innerHTML = `<div class="history-main"><div class="history-title"></div><div class="history-time"></div></div><span class="history-chevron">⌄</span>`;
+      summary.querySelector('.history-title').textContent = item.description || 'Perubahan content';
+      summary.querySelector('.history-time').textContent = formatHistoryTime(item.created_at || item.timestamp);
+      details.appendChild(summary);
+
+      const detail = document.createElement('div');
+      detail.className = 'history-detail';
+      const changes = Array.isArray(item.changes) ? item.changes : [];
+      if (changes.length){
+        changes.forEach(change => {
+          const box = document.createElement('div');
+          box.className = 'history-change';
+          box.innerHTML = '<div class="history-field"></div><div class="history-value history-before"><span class="history-label">Sebelum</span><span class="value"></span></div><div class="history-value history-after"><span class="history-label">Sesudah</span><span class="value"></span></div>';
+          box.querySelector('.history-field').textContent = change.field || 'content';
+          box.querySelector('.history-before .value').textContent = historyValue(change.before);
+          box.querySelector('.history-after .value').textContent = historyValue(change.after);
+          detail.appendChild(box);
+        });
+      } else {
+        const empty = document.createElement('div');
+        empty.className = 'history-empty';
+        empty.textContent = 'Tidak ada detail perubahan.';
+        detail.appendChild(empty);
+      }
+
+      if (item.snapshot){
+        const snap = document.createElement('details');
+        snap.className = 'history-snapshot';
+        snap.innerHTML = '<summary>Lihat snapshot setelah perubahan</summary><pre></pre>';
+        snap.querySelector('pre').textContent = JSON.stringify(item.snapshot, null, 2);
+        detail.appendChild(snap);
+      }
+      details.appendChild(detail);
+      list.appendChild(details);
+    });
+  }
+
+  async function loadHistory(reset = false){
+    const list = document.getElementById('historyList');
+    const button = document.getElementById('historyLoadMore');
+    if (reset){
+      historyOffset = 0;
+      historyHasMore = false;
+      list.innerHTML = '<div class="history-empty">Memuat riwayat...</div>';
+    }
+    button.disabled = true;
+    try {
+      const res = await fetch(`/api/history?limit=20&offset=${historyOffset}`, { cache: 'no-store' });
+      let data = {};
+      try { data = await res.json(); } catch {}
+      if (res.status === 401) throw new Error('Sesi admin tidak valid. Silakan login kembali.');
+      if (!res.ok) throw new Error(data.error || 'Gagal mengambil riwayat.');
+      const items = Array.isArray(data.history) ? data.history : [];
+      renderHistory(items, !reset && historyOffset > 0);
+      historyOffset += items.length;
+      historyHasMore = !!data.hasMore;
+      button.hidden = !historyHasMore;
+      button.disabled = false;
+    } catch (error) {
+      if (reset) list.innerHTML = '';
+      const err = document.createElement('div');
+      err.className = 'history-empty';
+      err.textContent = error.message || 'Gagal mengambil riwayat.';
+      list.appendChild(err);
+      button.hidden = true;
+      button.disabled = false;
+    }
+  }
+
+  document.getElementById('historyLoadMore').addEventListener('click', () => loadHistory(false));
+
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    state.logo = document.getElementById('f-logo').value.trim() || state.logo;
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'magangjogja-content.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
+  document.getElementById('importFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        state = {
+          logo: typeof parsed.logo === 'string' && parsed.logo ? parsed.logo : state.logo,
+          positions: Array.isArray(parsed.positions) ? parsed.positions : state.positions,
+          facilities: Array.isArray(parsed.facilities) ? parsed.facilities : state.facilities
+        };
+        fillLogo();
+        renderRows('positions'); renderRows('facilities');
+        showToast('File JSON berhasil dimuat. Klik "Simpan Perubahan" untuk menerapkan ke server.');
+      } catch (err) {
+        alert('File JSON tidak valid.');
+      }
+    };
+    reader.readAsText(file);
+  });
+</script>
+</body>
+</html>

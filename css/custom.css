@@ -1,0 +1,190 @@
+﻿/* ============================================
+   Custom CSS - Magang Jogja
+   ============================================ */
+
+/* --- Gallery --- */
+.gallery-icon.portrait {
+    padding: 0px 10px;
+}
+
+.gallery-icon.portrait > img {
+    border: 5px solid #dedede;
+    border-radius: 55px;
+}
+
+.gallery-item .gallery-caption {
+    padding-top: 20px;
+}
+
+.gallery-item .gallery-caption:before {
+    content: '\e89e';
+    font-family: eicons;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
+    background: #00ce5e;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    font-size: 2em;
+    position: relative;
+    margin-top: -40px;
+    margin-left: calc((100% - 40px) / 2);
+}
+
+/* --- Navigation --- */
+#navMJ #nav a {
+    color: white;
+}
+
+#navMJ #nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+#navMJ #nav ul li {
+    display: inline-block;
+    margin: 0 10px;
+    list-style-type: none;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+@media (min-width: 300px) {
+    #navMJ #nav {
+        text-align: right;
+    }
+}
+
+/* --- Icon List --- */
+li.elementor-icon-list-item {
+    background-color: #1e2631;
+    margin-bottom: 5px !important;
+    padding: 5px 7px !important;
+    transition: all 0.3s ease;
+}
+
+.elementor-icon-list-icon > i {
+    color: #00ce5e !important;
+}
+
+.elementor-icon-list-text {
+    color: #ffffff !important;
+    font-size: 18px !important;
+}
+
+li.elementor-icon-list-item:hover {
+    transform: translateY(-7px);
+    -moz-box-shadow: 5px 10px 30px 5px rgba(25, 200, 128, 0.7);
+    -webkit-box-shadow: 5px 10px 30px 5px rgba(25, 200, 128, 0.7);
+    box-shadow: 5px 10px 30px 5px rgba(25, 200, 128, 0.7);
+}
+
+/* ===== Layout & Component Overrides (migrated from inline) ===== */
+
+.paddd {
+  border-bottom: 15px solid #de7676 !important;
+}
+.colo .elementor-col-20 {
+  min-height: 25px;
+}
+.myflex .elementor-widget-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.myflex .elementor-widget-wrap > div {
+  -ms-flex: 0 0 50%;
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+@media (min-width: 768px) {
+.myflex .elementor-widget-wrap > div {
+  flex: 0 0 33.333333%;
+max-width: 33.333333%;
+}
+}
+
+/* --- Posisi Magang: ikon dan label rata sejajar --- */
+.elementor-widget-jet-inline-svg .jet-inline-svg__wrapper {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.elementor-widget-jet-inline-svg .jet-inline-svg__wrapper img {
+  max-width: 300px !important;
+  max-height: 300px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain;
+}
+
+.boxe .elementor-heading-title {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.formasi {
+  margin: 0 auto 10px auto;
+}
+@media (min-width: 768px) {
+  .formasi {
+  max-width: 70%;
+  }
+}
+.wt-bannermanimg{
+	margin: 0;
+	float: left;
+	width: 100%;
+	position: relative;
+}
+.wt-bannermanimg img{
+	width: 100%;
+	display: block;
+}
+.wt-bannermanimgone,
+.wt-bannermanimgtwo{
+	top: 0;
+	left: 0;
+	content: '';
+	position: absolute;
+	animation-name: floating;
+	-webkit-animation-name: floating;
+	animation-iteration-count: infinite;
+	-webkit-animation-iteration-count: infinite;
+	animation-timing-function: linear;
+	-webkit-animation-timing-function: linear;
+}
+.wt-bannermanimgone{
+		animation-duration: 7s;
+	-webkit-animation-duration: 7s;
+}
+.wt-bannermanimgtwo{
+		animation-duration: 12s;
+	-webkit-animation-duration: 12s;
+}
+@keyframes floating {
+	0% {
+		transform: translateY(0%);
+	}
+	50% {
+		transform: translateY(5%);
+	}
+	100% {
+		transform: translateY(0%);
+	}
+}

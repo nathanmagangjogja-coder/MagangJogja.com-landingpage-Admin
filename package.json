@@ -1,0 +1,13 @@
+{
+  "name": "magangjogja-com",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  },
+  "scripts": {
+    "dev": "node local-server.js",
+    "start": "node local-server.js"
+  }
+}
